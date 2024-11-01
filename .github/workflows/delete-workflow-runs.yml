@@ -11,10 +11,11 @@ jobs:
       actions: write
       contents: read
     steps:
-      - name: Delete workflow runs for forked repository
+      - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v2
         with:
-          token: ${{ secrets.PAT }}  # 使用你的个人访问令牌
-          repository: '${{ github.repository }}'  # 当前仓库
-          retain_days: 7
-          keep_minimum_runs: 6
+          token: ${{ secrets.PAT }}
+          repository: '${{ github.repository }}'
+          retain_days: 0  # 设置为 0，删除所有历史运行记录
+          keep_minimum_runs: 0  # 不保留任何运行记录
+        continue-on-error: true
