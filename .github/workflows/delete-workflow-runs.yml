@@ -1,14 +1,8 @@
 name: Delete old workflow runs
 on:
-# Run weekly, at 00:00 on sunday.
   schedule:
-    - cron: '0 0 * * 0'
-  
-  workflow_dispatch:
-    inputs:
-      tags:
-        description:
-          "run from cmdline"
+    - cron: '0 0 * * 0'  # 每周日凌晨执行
+  workflow_dispatch:  # 手动触发
 
 jobs:
   del_runs:
@@ -17,17 +11,10 @@ jobs:
       actions: write
       contents: read
     steps:
-      - name: Delete workflow runs for current repo
+      - name: Delete workflow runs for forked repository
         uses: Mattraks/delete-workflow-runs@v2
         with:
-          token: ${{ secrets.WORK_TOKEN }}
-          repository: ${{ github.repository }}
-          retain_days: 7
-          keep_minimum_runs: 6
-      - name: Delete workflow runs for remote repo
-        uses: Mattraks/delete-workflow-runs@v2
-        with:
-          token: ${{ secrets.REMOTE_REPO_TOKEN }}  # 新创建的 Token
-          repository: 'Owner/repository'
+          token: ${{ secrets.PAT }}  # 使用你的个人访问令牌
+          repository: '${{ github.repository }}'  # 当前仓库
           retain_days: 7
           keep_minimum_runs: 6
